@@ -7,7 +7,8 @@ const {
   notFoundHandler,
   genericErrorHandler,
 } = require("./services/utilities/errorHandling");
-
+const workersRouter = require("./services/workers");
+const requestsRouter = require("./services/requests")
 const server = express();
 const port = process.env.PORT || 3002;
 
@@ -22,7 +23,8 @@ server.use(
 
 
 server.use(express.json());
-
+server.use("/worker", workersRouter);
+server.use("/request",requestsRouter)
 server.use(badRequestHandler);
 server.use(notFoundHandler);
 server.use(genericErrorHandler);
