@@ -1,10 +1,28 @@
 const { Schema, model } = require("mongoose");
 const RequestSchema = new Schema(
   {
-    name: {
+    firstName: {
       type: String,
       required: true,
-    }
+    },
+    secondName: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    question: {
+      type: String
+    },
+    workerName: {
+      type: String
+    },
   },
   { timestamps: true }
 );
