@@ -8,7 +8,8 @@ const {
   genericErrorHandler,
 } = require("./services/utilities/errorHandling");
 const workersRouter = require("./services/workers");
-const requestsRouter = require("./services/requests")
+const requestsRouter = require("./services/requests");
+const appliesRouter = require("./services/applies");
 const server = express();
 const port = process.env.PORT || 3002;
 
@@ -21,14 +22,13 @@ server.use(
   })
 );
 
-
 server.use(express.json());
 server.use("/worker", workersRouter);
-server.use("/request",requestsRouter)
+server.use("/request", requestsRouter);
+server.use("/apply",appliesRouter)
 server.use(badRequestHandler);
 server.use(notFoundHandler);
 server.use(genericErrorHandler);
-
 
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING, {

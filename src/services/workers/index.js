@@ -14,6 +14,7 @@ var msg = {
 };
 workersRouter.get("/getWorkers", async (req, res, next) => {
     try {
+      console.log(req)
       const workers = await WorkerModel.find()
       res.send(workers);
       console.log("-----Workers sent------");
@@ -23,7 +24,7 @@ workersRouter.get("/getWorkers", async (req, res, next) => {
   });
 workersRouter.post("/addWorker", async (req, res, next) => {
   try {
-    const newWorker = new WorkerModel(req.body);
+    const newWorker = new WorkerModel(req.file);
     const { _id } = await newWorker.save();
     res.send(_id);
     console.log("-----Worker added------");
