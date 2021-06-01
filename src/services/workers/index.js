@@ -14,7 +14,6 @@ var msg = {
 };
 workersRouter.get("/getWorkers", async (req, res, next) => {
     try {
-      console.log(req)
       const workers = await WorkerModel.find()
       res.send(workers);
       console.log("-----Workers sent------");
@@ -24,7 +23,7 @@ workersRouter.get("/getWorkers", async (req, res, next) => {
   });
 workersRouter.post("/addWorker", async (req, res, next) => {
   try {
-    const newWorker = new WorkerModel(req.file);
+    const newWorker = new WorkerModel(req.body);
     const { _id } = await newWorker.save();
     res.send(_id);
     console.log("-----Worker added------");
@@ -38,7 +37,7 @@ workersRouter.delete("/removeWorker/:id", async (req, res, next) => {
       mongoose.Types.ObjectId(req.params.id)
     );
     workersArray.save();
-    res.send("ok");
+    res.send(await WorkerModel.find());
     console.log("-----Worker removed------");
   } catch (error) {
     next(error);

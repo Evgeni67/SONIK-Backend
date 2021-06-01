@@ -23,8 +23,8 @@ server.use(
 );
 
 server.use(express.json());
-server.use("/worker", workersRouter);
-server.use("/request", requestsRouter);
+server.use("/workers", workersRouter);
+server.use("/hireRequest", requestsRouter);
 server.use("/apply",appliesRouter)
 server.use(badRequestHandler);
 server.use(notFoundHandler);
