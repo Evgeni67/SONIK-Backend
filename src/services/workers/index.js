@@ -48,11 +48,12 @@ workersRouter.put("/editWorker/:id", async (req, res, next) => {
     const editWorker = await WorkerModel.findByIdAndUpdate(
       mongoose.Types.ObjectId(req.params.id),
       {
-        $set: { "name":"nikolay" }
+        $set: {...req.body }
       },{ new: true }
     );
     editWorker.save();
-    res.send("ok");
+    res.send(await WorkerModel.find());
+    console.log(req.body)
     console.log("-----Worker edited------");
   } catch (error) {
     next(error);

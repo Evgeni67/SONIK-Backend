@@ -24,8 +24,11 @@ const WorkersSchema = new Schema(
     bio: {
       type: String,
       required: true,
-    }
-   
+    },
+    cscsLevel: {
+       type: String,
+       required: true 
+      },
   },
   { timestamps: true }
 );
