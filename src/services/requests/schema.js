@@ -20,7 +20,7 @@ const RequestSchema = new Schema(
     question: {
       type: String
     },
-    workerName: {
+    workerId: {
       type: String
     },
   },

@@ -10,6 +10,7 @@ const {
 const workersRouter = require("./services/workers");
 const requestsRouter = require("./services/requests");
 const appliesRouter = require("./services/applies");
+const adminRouter = require("./services/admin");
 const server = express();
 const port = process.env.PORT || 3002;
 
@@ -26,6 +27,7 @@ server.use(express.json());
 server.use("/workers", workersRouter);
 server.use("/hireRequest", requestsRouter);
 server.use("/apply",appliesRouter)
+server.use("/admin",adminRouter)
 server.use(badRequestHandler);
 server.use(notFoundHandler);
 server.use(genericErrorHandler);

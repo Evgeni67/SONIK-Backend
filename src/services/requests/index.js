@@ -34,6 +34,7 @@ requestRouter.post("/addRequest", async (req, res, next) => {
   }
 });
 requestRouter.delete("/deleteRequest/:id", async (req, res, next) => {
+  console.log("123132")
   try {
     const requestArray = await requestModel.findByIdAndDelete(
       mongoose.Types.ObjectId(req.params.id)

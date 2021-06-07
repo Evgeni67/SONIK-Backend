@@ -4,7 +4,16 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const WorkerModel = require("./schema");
 const workersRouter = express.Router();
 var mongoose = require("mongoose");
-
+const cloudinary = require("../utilities/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "samples",
+  },
+});
+const cloudinaryMulter = multer({ storage: storage });
 var msg = {
   to: "lolskinsspothlight@gmail.com", // Change to your recipient
   from: "evgeni776@abv.bg", // Change to your verified sender
@@ -31,6 +40,27 @@ workersRouter.post("/addWorker", async (req, res, next) => {
     next(error);
   }
 });
+workersRouter.post(
+  "/addPictureToWorker/:id",
+  cloudinaryMulter.single("postPic"),
+  async (req, res, next) => {
+    try {
+      console.log(req.file.path);
+      const newWorker = await WorkerModel.findByIdAndUpdate(
+        mongoose.Types.ObjectId(req.params.id),
+        {
+          $set: { profileImg: req.file.path },
+        },
+        { new: true }
+      );
+      const { _id } = await newWorker.save();
+      res.send(await WorkerModel.find());
+      console.log("-----newWorker picture added------");
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 workersRouter.delete("/removeWorker/:id", async (req, res, next) => {
   try {
     const workersArray = await WorkerModel.findByIdAndDelete(
