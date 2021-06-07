@@ -7,6 +7,7 @@ const multer = require("multer");
 var mongoose = require("mongoose");
 const cloudinary = require("../utilities/cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { authorize } = require("../auth/middleware")
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -21,7 +22,7 @@ var msg = {
   text: "Shop online at http://localhost:3000",
   html: "<strong>and easy to do anywhere, even with Node.js</strong>",
 };
-applyRouter.get("/getApplies", async (req, res, next) => {
+applyRouter.get("/getApplies",authorize, async (req, res, next) => {
   try {
     const applies = await ApplyModel.find();
     res.send(applies);

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const UserModel = require("../services/admin/schema");
+const UserModel = require("../admin/schema");
 const { verifyJWT } = require("./tools");
 
 const authorize = async (req, res, next) => {
