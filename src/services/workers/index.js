@@ -7,6 +7,7 @@ var mongoose = require("mongoose");
 const cloudinary = require("../utilities/cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
+const { authorize } = require("../auth/middleware");
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -22,19 +23,20 @@ var msg = {
   html: "<strong>and easy to do anywhere, even with Node.js</strong>",
 };
 workersRouter.get("/getWorkers", async (req, res, next) => {
-    try {
-      const workers = await WorkerModel.find()
-      res.send(workers);
-      console.log("-----Workers sent------");
-    } catch (error) {
-      next(error);
-    }
-  });
-workersRouter.post("/addWorker", async (req, res, next) => {
   try {
+    const workers = await WorkerModel.find();
+    res.send(workers);
+    console.log("-----Workers sent------");
+  } catch (error) {
+    next(error);
+  }
+});
+workersRouter.post("/addWorker", authorize, async (req, res, next) => {
+  try {
+    console.log(req.body)
     const newWorker = new WorkerModel(req.body);
     const { _id } = await newWorker.save();
-    res.send(_id);
+    res.send(WorkerModel.find());
     console.log("-----Worker added------");
   } catch (error) {
     next(error);
@@ -42,6 +44,7 @@ workersRouter.post("/addWorker", async (req, res, next) => {
 });
 workersRouter.post(
   "/addPictureToWorker/:id",
+  authorize,
   cloudinaryMulter.single("postPic"),
   async (req, res, next) => {
     try {
@@ -61,7 +64,7 @@ workersRouter.post(
     }
   }
 );
-workersRouter.delete("/removeWorker/:id", async (req, res, next) => {
+workersRouter.delete("/removeWorker/:id",authorize, async (req, res, next) => {
   try {
     const workersArray = await WorkerModel.findByIdAndDelete(
       mongoose.Types.ObjectId(req.params.id)
@@ -73,17 +76,18 @@ workersRouter.delete("/removeWorker/:id", async (req, res, next) => {
     next(error);
   }
 });
-workersRouter.put("/editWorker/:id", async (req, res, next) => {
+workersRouter.put("/editWorker/:id",authorize, async (req, res, next) => {
   try {
     const editWorker = await WorkerModel.findByIdAndUpdate(
       mongoose.Types.ObjectId(req.params.id),
       {
-        $set: {...req.body }
-      },{ new: true }
+        $set: { ...req.body },
+      },
+      { new: true }
     );
     editWorker.save();
     res.send(await WorkerModel.find());
-    console.log(req.body)
+    console.log(req.body);
     console.log("-----Worker edited------");
   } catch (error) {
     next(error);

@@ -4,7 +4,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const requestModel = require("./schema");
 const requestRouter = express.Router();
 var mongoose = require("mongoose");
-
+const { authorize } = require("../auth/middleware")
 var msg = {
   to: "lolskinsspothlight@gmail.com", // Change to your recipient
   from: "evgeni776@abv.bg", // Change to your verified sender
@@ -13,7 +13,7 @@ var msg = {
   html: "<strong>and easy to do anywhere, even with Node.js</strong>",
 };
 
-requestRouter.get("/getRequests", async (req, res, next) => {
+requestRouter.get("/getRequests",authorize, async (req, res, next) => {
   try {
     console.log("newRequest")
     const requests = await requestModel.find()
@@ -33,7 +33,7 @@ requestRouter.post("/addRequest", async (req, res, next) => {
     next(error);
   }
 });
-requestRouter.delete("/deleteRequest/:id", async (req, res, next) => {
+requestRouter.delete("/deleteRequest/:id",authorize, async (req, res, next) => {
   console.log("123132")
   try {
     const requestArray = await requestModel.findByIdAndDelete(
@@ -46,7 +46,7 @@ requestRouter.delete("/deleteRequest/:id", async (req, res, next) => {
     next(error);
   }
 });
-requestRouter.put("/editRequest/:id", async (req, res, next) => {
+requestRouter.put("/editRequest/:id",authorize, async (req, res, next) => {
   try {
     const editRequest = await requestModel.findByIdAndUpdate(
       mongoose.Types.ObjectId(req.params.id),

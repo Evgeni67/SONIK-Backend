@@ -32,10 +32,12 @@ const {
   adminRouter.post("/login", async (req, res, next) => {
     try {
       const { email, password } = req.body;
+      console.log("BODY ->", req.body)
       const user = await ProfileModel.findByCredentials(email, password, {
         new: true,
       });
       const tokens = await authenticate(user);
+      console.log(tokens)
       res.send(tokens);
     } catch (error) {
       next(error);

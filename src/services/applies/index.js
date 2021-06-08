@@ -31,7 +31,7 @@ applyRouter.get("/getApplies",authorize, async (req, res, next) => {
     next(error);
   }
 });
-applyRouter.get("/getApply/:id", async (req, res, next) => {
+applyRouter.get("/getApply/:id",authorize, async (req, res, next) => {
   try {
     const apply = await ApplyModel.findById(
       mongoose.Types.ObjectId(req.params.id)
@@ -80,19 +80,19 @@ applyRouter.post(
     }
   }
 );
-applyRouter.delete("/declineApply/:id", async (req, res, next) => {
+applyRouter.delete("/declineApply/:id",authorize, async (req, res, next) => {
   try {
     const appliesArray = await ApplyModel.findByIdAndDelete(
       mongoose.Types.ObjectId(req.params.id)
     );
     appliesArray.save();
-    res.send("ok");
+    res.send(await ApplyModel.find());
     console.log("-----Apply declined------");
   } catch (error) {
     next(error);
   }
 });
-applyRouter.put("/editApply/:id", async (req, res, next) => {
+applyRouter.put("/editApply/:id",authorize, async (req, res, next) => {
   try {
     const editApply = await ApplyModel.findByIdAndUpdate(
       mongoose.Types.ObjectId(req.params.id),
