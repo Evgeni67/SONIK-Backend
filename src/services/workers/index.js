@@ -70,7 +70,7 @@ workersRouter.delete("/removeWorker/:id",authorize, async (req, res, next) => {
       mongoose.Types.ObjectId(req.params.id)
     );
     workersArray.save();
-    res.send(await WorkerModel.find());
+    res.send(WorkerModel.find());
     console.log("-----Worker removed------");
   } catch (error) {
     next(error);
