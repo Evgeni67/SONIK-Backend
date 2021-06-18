@@ -21,6 +21,10 @@ const ApplySchema = new Schema(
       type: String,
       required: true,
     },
+    address: {
+      type: String,
+      
+    },
     location: {
       type: String,
       required: true,
